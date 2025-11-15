@@ -84,3 +84,109 @@ Model training complete.
   "outlier_threshold": 66485.0,
   "outlier_fraction": 0.01990487933767835
 }
+
+\\ removed leaky feature
+
+Baseline metrics (predict train mean): {'mse': 258353647.00099832, 'rmse': 16073.383184662722, 'mae': 11757.386925168035, 'r2': -0.0005357562147469963, 'mape': 117.59830920394559}
+Non-outlier metrics (<= 66485): {'mse': 70889537.32733352, 'rmse': 8419.592468007791, 'mae': 5089.716536589226, 'r2': 0.6097527218424796, 'mape': 33.747929487674774}
+Model training complete.
+{
+  "mse": 121094337.13853851,
+  "rmse": 11004.287216287046,
+  "mae": 5786.688086268536,
+  "r2": 0.5310334667667262,
+  "mape": 34.0747489630029,
+  "baseline_metrics": {
+    "mse": 258353647.00099832,
+    "rmse": 16073.383184662722,
+    "mae": 11757.386925168035,
+    "r2": -0.0005357562147469963,
+    "mape": 117.59830920394559
+  },
+  "cv_mse_mean": 107309232.0,
+  "cv_mse_std": 3263579.0,
+  "cv_mse_scores": [
+    109253952.0,
+    106112120.0,
+    101554240.0,
+    110904472.0,
+    108721336.0
+  ],
+  "train_size": 13245,
+  "test_size": 5677,
+  "model_type": "catboost_gpu",
+  "catboost_best_params": {
+    "learning_rate": 0.05,
+    "depth": 8,
+    "iterations": 2000,
+    "l2_leaf_reg": 3.0,
+    "bagging_temperature": 0.5,
+    "border_count": 128
+  },
+  "catboost_loss_function": "RMSE",
+  "catboost_eval_metric": "RMSE",
+  "backend": "gpu",
+  "catboost_combinations_evaluated": 16,
+  "non_outlier_metrics": {
+    "mse": 70889537.32733352,
+    "rmse": 8419.592468007791,
+    "mae": 5089.716536589226,
+    "r2": 0.6097527218424796,
+    "mape": 33.747929487674774
+  },
+  "outlier_threshold": 66485.0,
+  "outlier_fraction": 0.01990487933767835
+}
+
+\\ Add frequent Feature
+
+Baseline metrics (predict train mean): {'mse': 258353647.00099832, 'rmse': 16073.383184662722, 'mae': 11757.386925168035, 'r2': -0.0005357562147469963, 'mape': 117.59830920394559}
+Non-outlier metrics (<= 66485): {'mse': 70668231.85211596, 'rmse': 8406.439903557031, 'mae': 5077.198065795192, 'r2': 0.6109710096547731, 'mape': 33.60899345248337}
+Model training complete.
+{
+  "mse": 111894522.29490493,
+  "rmse": 10578.020717265821,
+  "mae": 5747.857684892324,
+  "r2": 0.5666619311157316,
+  "mape": 33.90737752475839,
+  "baseline_metrics": {
+    "mse": 258353647.00099832,
+    "rmse": 16073.383184662722,
+    "mae": 11757.386925168035,
+    "r2": -0.0005357562147469963,
+    "mape": 117.59830920394559
+  },
+  "cv_mse_mean": 105251680.0,
+  "cv_mse_std": 5219633.5,
+  "cv_mse_scores": [
+    112881144.0,
+    103325344.0,
+    96875384.0,
+    106055280.0,
+    107121240.0
+  ],
+  "train_size": 13245,
+  "test_size": 5677,
+  "model_type": "catboost_gpu",
+  "catboost_best_params": {
+    "learning_rate": 0.05,
+    "depth": 8,
+    "iterations": 2000,
+    "l2_leaf_reg": 5.0,
+    "bagging_temperature": 1.0,
+    "border_count": 128
+  },
+  "catboost_loss_function": "RMSE",
+  "catboost_eval_metric": "RMSE",
+  "backend": "gpu",
+  "catboost_combinations_evaluated": 16,
+  "non_outlier_metrics": {
+    "mse": 70668231.85211596,
+    "rmse": 8406.439903557031,
+    "mae": 5077.198065795192,
+    "r2": 0.6109710096547731,
+    "mape": 33.60899345248337
+  },
+  "outlier_threshold": 66485.0,
+  "outlier_fraction": 0.01990487933767835
+}

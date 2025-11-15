@@ -511,8 +511,7 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     cleaned["Engine_volume_log"] = np.log1p(cleaned["Engine_volume"])
     cleaned["Prod_year_bin"] = bucket_prod_year(cleaned["Prod_year"])
     model_freq = cleaned["Model"].value_counts()
-    cleaned["Model_freq"] = cleaned["Model"].map(model_freq)
-
+    cleaned["Model_frequent"] = cleaned["Model"].map(model_freq)
     reference_year = int(cleaned["Prod_year"].max())
     cleaned["Vehicle_age"] = (reference_year - cleaned["Prod_year"]).clip(lower=0)
     cleaned["Mileage_per_year"] = cleaned["Mileage"] / np.maximum(
@@ -532,11 +531,6 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
         cleaned["Manufacturer"].astype(str).str.upper().isin(PREMIUM_MANUFACTURERS)
     )
     cleaned["Is_premium_brand"] = premium_mask.astype(np.int8)
-
-    manufacturer_price_mean = cleaned.groupby("Manufacturer")["Price"].transform("mean")
-    model_price_mean = cleaned.groupby("Model")["Price"].transform("mean")
-    cleaned["Manufacturer_price_mean"] = manufacturer_price_mean
-    cleaned["Model_price_mean"] = model_price_mean
 
     year_min = cleaned["Prod_year"].min()
     year_max = cleaned["Prod_year"].max()
@@ -802,17 +796,25 @@ def cross_validate_ridge(
 def compute_regression_metrics(
     y_true: np.ndarray, y_pred: np.ndarray
 ) -> Dict[str, float]:
+    y_true = np.asarray(y_true, dtype=np.float64)
+    y_pred = np.asarray(y_pred, dtype=np.float64)
+
     mse = mean_squared_error(y_true, y_pred)
     rmse = float(np.sqrt(mse))
     mae = mean_absolute_error(y_true, y_pred)
     r2 = r2_score(y_true, y_pred)
-    mape = float(
-        np.mean(
-            np.abs((y_true - y_pred) / np.maximum(np.abs(y_true), 1e-8))
-        )
-        * 100.0
-    )
-    return {"mse": float(mse), "rmse": rmse, "mae": float(mae), "r2": float(r2), "mape": mape}
+
+    # Robustified MAPE: avoid tiny denominators
+    denom = np.maximum(np.abs(y_true), 5000.0)  # floor at e.g. $5k
+    mape = float(np.mean(np.abs((y_true - y_pred) / denom)) * 100.0)
+
+    return {
+        "mse": float(mse),
+        "rmse": rmse,
+        "mae": mae,
+        "r2": float(r2),
+        "mape": mape,
+    }
 
 
 def compute_outlier_mask(y: np.ndarray, percentile: float = 0.98) -> np.ndarray:
@@ -912,14 +914,12 @@ def main() -> None:
         "BrandCountry",
         "Mileage_log",
         "Engine_volume_log",
-        "Model_freq",
+        "Model_frequent",
         "Vehicle_age",
         "Mileage_per_year",
         "Mileage_per_year_log",
         "Engine_per_cylinder",
         "Is_premium_brand",
-        "Manufacturer_price_mean",
-        "Model_price_mean",
         "Prod_year_sin",
         "Prod_year_cos",
         "Age_x_Mileage_log",
@@ -946,14 +946,12 @@ def main() -> None:
         "Doors_numeric",
         "Mileage_log",
         "Engine_volume_log",
-        "Model_freq",
+        "Model_frequent",
         "Vehicle_age",
         "Mileage_per_year",
         "Mileage_per_year_log",
         "Engine_per_cylinder",
         "Is_premium_brand",
-        "Manufacturer_price_mean",
-        "Model_price_mean",
         "Prod_year_sin",
         "Prod_year_cos",
         "Age_x_Mileage_log",
