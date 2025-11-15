@@ -1,3 +1,5 @@
+<redacted>
+
 (gg) :~/Downloads/project$ python model/train_model.py --model-type catboost --output-dir model/artifacts
 Baseline metrics (predict train mean): {'mse': 258353647.00099832, 'rmse': 16073.383184662722, 'mae': 11757.386925168035, 'r2': -0.0005357562147469963}
 Model training complete.
